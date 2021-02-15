@@ -5,7 +5,7 @@
         <api_name>x_snc_devtools.DocumentationAPI</api_name>
         <caller_access/>
         <client_callable>false</client_callable>
-        <description/>
+        <description>The DocumentationAPI helps to render fragements of an HTML page that documents the components of a scoped application.</description>
         <name>DocumentationAPI</name>
         <script><![CDATA[var DocumentationAPI = Class.create();
 DocumentationAPI.prototype = {
@@ -30,6 +30,20 @@ DocumentationAPI.prototype = {
 	RenderHeader: function()
 	{
 		return '<h1>'+this.m_strAppName+' '+this.m_strAppVersion+'</h1>';
+	},
+	
+	RenderLink: function(strURL,strText)
+	{
+		strURL = GetStringValue(strURL);
+		strText = GetStringValue(strText);
+		if (strText == '')
+		{
+			strText = strURL;
+		}
+		//strURL = HtmlEncode(strURL);
+		var strHTML = '<a href="'+strURL+'" target="_blank">'+strText+'</a>';
+		Debug('RenderLink: '+strHTML);
+		return strHTML;
 	},
 	
 	RenderCopyright: function(nCopyrightYear, strCopyrightHolder)
@@ -143,13 +157,23 @@ DocumentationAPI.prototype = {
 		grSSI.orderBy('name');
 		grSSI.query();
 
-		var strScriptIncludes = '';
+		var strHTML = '<ul>';
 		while (grSSI.next())
 		{
 			var strDescription = HtmlEncode(grSSI.getValue('description'));
-			strScriptIncludes = strScriptIncludes + '<p><b>'+grSSI.getValue('name')+'</b>&#160;'+strDescription+'</p>';
+			
+			
+			strHTML += '<li>';
+			strHTML += '<a href="/sys_script_include.do?sys_id=' ;
+			strHTML += grSSI.sys_id;
+			strHTML += '">';
+			strHTML += grSSI.getValue('name');
+			strHTML += '</a>&#160;';
+			strHTML += '<p>'+strDescription+'</p>';
+			strHTML += '</li>';		
 		}
-		return strScriptIncludes;
+		strHTML += '</ul>';
+		return strHTML;
 	},
 	
 	RenderTestStepConfigurations: function()
@@ -179,6 +203,16 @@ DocumentationAPI.prototype = {
 		return strHTML;	
 	},
 	
+	RenderInstallationInstructionsImportFromSourceControl: function(strAppName, strRepoURL)
+	{
+		var strHTML = '';
+		strHTML +=	'<li>To install '+strAppName+' create an account on&#160;<a href="https://github.com/" target="_blank">GitHub</a>&#160;(if not done already).</li>';
+		strHTML +=	'<li>Paris or later: Add&#160;<a href="/discovery_credentials_list.do" target="_blank">credentials</a>&#160;to access GitHub (Use "Basic Auth").</li>'; 
+		strHTML +=	'<li>Fork the repository&#160;<a href="'+strRepoURL+'" target="_blank">'+strRepoURL+'</a>.</li>';
+		strHTML +=	'<li>Go to&#160;<a href="/$studio.do" target="_blank">Studio</a>&#160;and import the '+strAppName+' application from source control.</li>';
+		return strHTML;
+	},
+	
 	RenderError: function()
 	{
 		return '<p style="color:red">ERROR: DocumentationAPI is not initialized!</p>';
@@ -190,13 +224,13 @@ DocumentationAPI.prototype = {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2021-01-20 15:26:20</sys_created_on>
         <sys_id>98912146db31e490ba15a353059619b6</sys_id>
-        <sys_mod_count>14</sys_mod_count>
+        <sys_mod_count>40</sys_mod_count>
         <sys_name>DocumentationAPI</sys_name>
         <sys_package display_value="DevTools" source="x_snc_devtools">d689f6901bd38450a89720a8ec4bcbfd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="DevTools">d689f6901bd38450a89720a8ec4bcbfd</sys_scope>
         <sys_update_name>sys_script_include_98912146db31e490ba15a353059619b6</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2021-01-21 08:58:30</sys_updated_on>
+        <sys_updated_on>2021-02-09 12:05:15</sys_updated_on>
     </sys_script_include>
 </record_update>

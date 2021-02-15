@@ -7,17 +7,18 @@
         <endpoint>x_snc_devtools_Start.do</endpoint>
         <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
-<div style="
-	padding-left: 20px;
-	">
+<div style="padding-left: 20px;">
+<span style="visibility: hidden;">_CUT_HERE_</span>
 	<g2:no_escape>$[
 		var docapi = new DocumentationAPI('d689f6901bd38450a89720a8ec4bcbfd');
 		docapi.RenderHeader();
 	]</g2:no_escape>
 	
+	<g:breakpoint />
+	
 	<p>Welcome to the DevTools - created and maintained by&#160;<a href="mailto:sascha.wildgrube@servicenow.com">Sascha Wildgrube</a>.</p>
 	
-	<h2>Features</h2>
+	<h2>Features</h2> 
 	<p>DevTools contains a number of&#160;<b>script includes</b>&#160;with useful javascript functions and classes like a GetType() function that realy works. A few&#160;<b>UI improvements</b>&#160;like the Re-Test button in the test result form and&#160;<b>shortcuts</b>&#160;to various - sometimes hidden - views and system properties in your instance.</p>
 
 	<h2>Disclaimer</h2>
@@ -26,7 +27,7 @@
 	
 	<h2>System Requirements</h2>
 	<ul>
-		<li>Madrid, New York, Orlando or Paris</li>
+		<li>Madrid, New York, Orlando, Paris or Quebec</li>
 	</ul>
 	
 
@@ -34,9 +35,12 @@
 	<h2>Installation</h2>
 	<p>To use the full potential of DevTools perform the following steps:</p>
 	<ol>
-		<li>Fork this repository: <a href="https://github.com/saschawildgrube/servicenow-devtools" target="_blank">https://github.com/saschawildgrube/servicenow-devtools</a></li>
-		<li>Paris or later: Add credentials to access GitHub (Use "Basic Auth")</li> 
-		<li>Install the application by importing it from source control in Studio.</li>
+		<g2:no_escape>$[
+			docapi.RenderInstallationInstructionsImportFromSourceControl(
+				'DevTools',
+				'https://github.com/saschawildgrube/servicenow-devtools');
+		]</g2:no_escape>
+
 		<li>Switch to global scope</li>
 		<li>Note that the following steps might be considered as a breach of security guidelines and should be validated with those who are responsible for security within the instance!</li>
 		<li>In order to run the installation script which configures new system property categories enable create, read, write and delete operations for all applications on the following tables:
@@ -49,6 +53,7 @@
 			<ol>
 				<li><a href="/sys_db_object.do?sys_id=sys_user&amp;sysparm_refkey=name" target="_blank">sys_user</a></li>
 				<li><a href="/sys_db_object.do?sys_id=sys_user_group&amp;sysparm_refkey=name" target="_blank">sys_user_group</a></li>
+				<li><a href="/sys_db_object.do?sys_id=sys_user_role&amp;sysparm_refkey=name" target="_blank">sys_user_role</a></li>
 				<li><a href="/sys_db_object.do?sys_id=incident&amp;sysparm_refkey=name" target="_blank">incident</a></li>
 				<li><a href="/sys_db_object.do?sys_id=incident_task&amp;sysparm_refkey=name" target="_blank">incident_task</a></li>
 				<li><a href="/sys_db_object.do?sys_id=change_request&amp;sysparm_refkey=name" target="_blank">change_request</a></li>
@@ -86,6 +91,19 @@
 	
 	<h2>Release Notes</h2>
 
+	<h3>1.9.0 - 2021-02-15</h3>
+	<ol>
+		<li>Quebec is now supported.</li>
+		<li>Added function GetRolesFromUser() to get the sys_ids of all active roles of a user.</li>
+		<li>Added function TestDataAPI::CreateRole() to create a role for testing purposes.</li>
+		<li>TestDataAPI::CreateUser() now also accepts the name of a role without the prefix.</li>
+		<li>Added function DocumentationAPI::RenderInstallationInstructionsImportFromSourceControl() to render installation instructions for importing an application from source control.</li>
+		<li>Improved the rendering of script include documentation in DocumentationAPI::RenderScriptIncludes().</li> 
+		<li>Added missing description to the DocumentationAPI script include.</li>
+		<li>Test step configuration "DevTools - Check scoped app sanity" now checks if the app's short_description is empty.</li>
+		<li>Test step configuration "DevTools - Check scoped app sanity" now checks if a module's link_type is set to "HTML" (which doesn't work properly).</li>
+	</ol>	
+	
 	<h3>1.8.0 - 2021-01-21</h3>
 	<ol>
 		<li>Added the DocumentationAPI class to render HTML fragments for a documentation UI page.</li>
@@ -175,8 +193,9 @@
 		<li>The install script is now a scheduled script that can be run on demand instead of a fix script that runs automatically.</li>
 	</ol>	
 	<h3>1.0.0 - 2020-06-23</h3>
-	<p>First baselined version</p>	
-</div>	
+	<p>First baselined version</p>
+<span style="visibility: hidden;">_CUT_HERE_</span>
+</div>
 </j:jelly>]]></html>
         <name>Start</name>
         <processing_script/>
@@ -184,13 +203,13 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2020-02-27 11:17:42</sys_created_on>
         <sys_id>e44fd7541b578450a89720a8ec4bcb8c</sys_id>
-        <sys_mod_count>171</sys_mod_count>
+        <sys_mod_count>229</sys_mod_count>
         <sys_name>Start</sys_name>
         <sys_package display_value="DevTools" source="x_snc_devtools">d689f6901bd38450a89720a8ec4bcbfd</sys_package>
         <sys_policy/>
         <sys_scope display_value="DevTools">d689f6901bd38450a89720a8ec4bcbfd</sys_scope>
         <sys_update_name>sys_ui_page_e44fd7541b578450a89720a8ec4bcb8c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2021-01-21 10:47:52</sys_updated_on>
+        <sys_updated_on>2021-02-15 14:39:41</sys_updated_on>
     </sys_ui_page>
 </record_update>
