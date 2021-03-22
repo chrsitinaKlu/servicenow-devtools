@@ -88,8 +88,27 @@ generateDescription();
 				bResult = false;
 				strMessage += '  Failed: copied_from should be EMPTY!\n';
 			}
+			
+			// Check sys_atf_step
+			var grSysAtfStep = new GlideRecord('sys_atf_step');
+			grSysAtfStep.addQuery('sys_scope','=',strAppSysId);
+			grSysAtfStep.addQuery('test','=',grSysAtfTest.sys_id);
+			grSysAtfStep.orderBy('order');
+			grSysAtfStep.query();
+			while (grSysAtfStep.next())
+			{
+				var strName = grSysAtfStep.getValue('order')/*++GetStringValue(grSysAtfStep.getValue('description'))*/;
+				//strMessage += 'Checking ATF test step: '+strName+'\n';
+				if (IsValidSysId(grSysAtfStep.getValue('step_config')) != true)
+				{
+					bResult = false;
+					strMessage += '  Failed: Invalid or missing step config in test step: '+strName+'!\n';
+				}
+			}					
+			
 		}
 		
+
 		
 		// Check sys_app_module
 		var grSysAppModule = new GlideRecord('sys_app_module');
@@ -140,6 +159,26 @@ generateDescription();
 			}
 		}		
 		
+		// Check for useless field level ACLs
+		var grSSA = new GlideRecord('sys_security_acl');
+		grSSA.addQuery('sys_scope','=',strAppSysId);
+		grSSA.query();
+		while(grSSA.next())
+		{
+			var strName = GetStringValue(grSSA.getValue('name'));
+			var strOperation = GetStringValue(grSSA.getValue('operation'));
+
+			strMessage += 'Checking ACL: '+strName+' / '+strOperation+'\n';
+			if (strName.contains('.'))
+			{
+				if (strOperation == 'create' || strOperation == 'delete')
+				{
+					strMessage += '  Failed: Useless field level ACL: '+strName+' / '+strOperation+' ('+grSSA.sys_id+')!\n';
+					bResult = false;
+				}
+			}
+		}
+		
 		
 	}
 	
@@ -188,14 +227,14 @@ generateDescription();
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2020-11-23 13:28:01</sys_created_on>
         <sys_id>786a921f1b6c2090a89720a8ec4bcbc9</sys_id>
-        <sys_mod_count>17</sys_mod_count>
+        <sys_mod_count>26</sys_mod_count>
         <sys_name>DevTools - Check scoped app sanity</sys_name>
         <sys_package display_value="DevTools" source="x_snc_devtools">d689f6901bd38450a89720a8ec4bcbfd</sys_package>
         <sys_policy/>
         <sys_scope display_value="DevTools">d689f6901bd38450a89720a8ec4bcbfd</sys_scope>
         <sys_update_name>sys_atf_step_config_786a921f1b6c2090a89720a8ec4bcbc9</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2021-03-19 13:50:23</sys_updated_on>
+        <sys_updated_on>2021-03-22 12:17:29</sys_updated_on>
         <template_reminder>TBD</template_reminder>
         <type display_value="Test Step" name="sys_atf_step">0d462a261b160010a89720a8ec4bcb8a</type>
         <wizard_redirect/>
